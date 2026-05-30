@@ -8,7 +8,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public String products() {
-        return "Product Service Running on AKS";
+        return "Product Service Running on AKS Congrate Ganesh You did it";
     }
 
     @GetMapping("/health")
