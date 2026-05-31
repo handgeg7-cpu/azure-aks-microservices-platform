@@ -1,13 +1,13 @@
 # Terraform
+**/.terraform/
 .terraform/
+Terraform/.terraform/
+
 *.tfstate
 *.tfstate.backup
 
 # Maven
-target/
+**/target/
 
 # VS Code
 .vscode/
-
-# Logs
-*.log
