@@ -54,3 +54,19 @@ jobs:
     - name: Push Docker Image
       run: |
         docker push acrganeshdevops001.azurecr.io/product-service:${{ github.run_number }}
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v4
+
+    - name: Configure kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.AKS_KUBECONFIG }}" > $HOME/.kube/config
+
+    - name: Deploy to AKS
+      run: |
+        kubectl set image deployment/product-service \
+        product-service=acrganeshdevops001.azurecr.io/product-service:${{ github.run_number }}
+
+    - name: Verify Rollout
+      run: |
+        kubectl rollout status deployment/product-service
