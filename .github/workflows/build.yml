@@ -30,8 +30,26 @@ jobs:
 
     - name: Build Application
       run: ./mvnw clean package
-    
+
     - name: Build Docker Image
       run: |
-       docker build -t product-service:${{ github.run_number }} .
-    
+        docker build -t product-service:${{ github.run_number }} .
+
+    - name: Azure Login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Login to ACR
+      run: |
+        az acr login --name acrganeshdevops001
+
+    - name: Tag Docker Image
+      run: |
+        docker tag product-service:${{ github.run_number }} acrganeshdevops001.azurecr.io/product-service:${{ github.run_number }}
+
+    - name: Push Docker Image
+      run: |
+        docker push acrganeshdevops001.azurecr.io/product-service:${{ github.run_number }}
