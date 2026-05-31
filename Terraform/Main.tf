@@ -39,3 +39,14 @@ resource "azurerm_log_analytics_workspace" "law" {
   sku                 = "PerGB2018"
   retention_in_days   = 30
 }
+
+resource "azurerm_role_assignment" "acr_pull" {
+  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  role_definition_name = "AcrPull"
+  scope                = azurerm_container_registry.acr.id
+
+  depends_on = [
+    azurerm_kubernetes_cluster.aks,
+    azurerm_container_registry.acr
+  ]
+}
