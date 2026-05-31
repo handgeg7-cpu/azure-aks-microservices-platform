@@ -41,7 +41,14 @@ jobs:
     - name: Azure Login
       uses: azure/login@v2
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+         creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Get AKS Credentials
+      run: |
+             az aks get-credentials \
+             --resource-group rg-microservices-dev \
+              --name aks-microservices-dev \
+              --overwrite-existing
 
     - name: Login to ACR
       run: |
