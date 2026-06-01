@@ -8,6 +8,7 @@ permissions:
   id-token: write
   contents: read
 
+  
 jobs:
   build:
 
@@ -46,7 +47,7 @@ jobs:
     - name: Get AKS Credentials
       run: |
              az aks get-credentials \
-             --resource-group rg-microservices-dev \
+              --resource-group rg-microservices-dev \
               --name aks-microservices-dev \
               --overwrite-existing
 
