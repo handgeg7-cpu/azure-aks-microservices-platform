@@ -184,3 +184,113 @@ DevOps Engineer
 
 Skills:
 Azure | AKS | Terraform | Docker | Kubernetes | GitHub Actions | Prometheus | Grafana | ArgoCD | Linux | AWS
+
+
+
+# Architecture Diagram
+
+```text
+                    +------------------+
+                    |   Developer      |
+                    +------------------+
+                              |
+                              v
+                    +------------------+
+                    |     GitHub       |
+                    | Source Code Repo |
+                    +------------------+
+                              |
+                              v
+                    +------------------+
+                    | GitHub Actions   |
+                    | CI/CD Pipeline   |
+                    +------------------+
+                              |
+              +---------------+---------------+
+              |                               |
+              v                               v
+    +------------------+         +------------------+
+    | Maven Build      |         | Docker Build     |
+    | Unit Testing     |         | Image Creation   |
+    +------------------+         +------------------+
+                                              |
+                                              v
+                               +---------------------------+
+                               | Azure Container Registry |
+                               |          (ACR)           |
+                               +---------------------------+
+                                              |
+                                              v
+                               +---------------------------+
+                               | Azure Kubernetes Service |
+                               |           (AKS)          |
+                               +---------------------------+
+                                              |
+                    +-------------------------+-------------------------+
+                    |                                                   |
+                    v                                                   v
+        +-------------------+                           +-------------------+
+        | Product Service   |                           | Order Service     |
+        | Spring Boot App   |                           | Spring Boot App   |
+        +-------------------+                           +-------------------+
+                    |                                                   |
+                    +-------------------------+-------------------------+
+                                              |
+                                              v
+                               +---------------------------+
+                               | Kubernetes Services      |
+                               | LoadBalancer / ClusterIP |
+                               +---------------------------+
+                                              |
+                                              v
+                                       End Users
+
+--------------------------------------------------------------------------
+
+Monitoring & Observability
+
+            +---------------------------------------+
+            |             Prometheus                |
+            | Scrapes Kubernetes & App Metrics      |
+            +---------------------------------------+
+                              |
+                              v
+            +---------------------------------------+
+            |               Grafana                 |
+            | Dashboards, Visualization & Analysis |
+            +---------------------------------------+
+
+--------------------------------------------------------------------------
+
+GitOps Deployment Flow
+
+             +--------------------+
+             |      GitHub        |
+             | Kubernetes Manifests|
+             +--------------------+
+                        |
+                        v
+             +--------------------+
+             |       ArgoCD       |
+             | Continuous Sync    |
+             +--------------------+
+                        |
+                        v
+             +--------------------+
+             |        AKS         |
+             +--------------------+
+```
+
+## End-to-End Workflow
+
+1. Developer pushes code to GitHub.
+2. GitHub Actions automatically triggers the CI/CD pipeline.
+3. Maven builds the Spring Boot application.
+4. Docker image is created and tagged.
+5. Docker image is pushed to Azure Container Registry (ACR).
+6. Kubernetes deployment is updated in AKS.
+7. AKS performs rolling deployment with health checks.
+8. Prometheus collects cluster and application metrics.
+9. Grafana visualizes metrics through dashboards.
+10. ArgoCD continuously synchronizes Kubernetes manifests from GitHub to AKS.
+
